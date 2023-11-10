@@ -21,5 +21,7 @@ public partial class User
 
     public string? Role { get; set; }
 
+    public virtual ICollection<Donate> Donates { get; set; } = new List<Donate>();
+
     public virtual ICollection<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 }

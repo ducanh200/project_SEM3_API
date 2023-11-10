@@ -77,7 +77,8 @@ namespace SEM3_API.Controllers
                     if (topic != null)
                     {
                         _context.Topics.Update(topic);
-                        return NoContent();
+                        _context.SaveChanges();
+                        return Ok("Thay đổi tên chủ đề thành công!");
                     }
                 }
                 catch (Exception e)

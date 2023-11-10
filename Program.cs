@@ -1,6 +1,9 @@
 
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,22 @@ string connectionString = builder.Configuration.GetConnectionString("API");
 builder.Services.AddDbContext<SEM3_API.Entities.Sem3ApiContext>(
         options => options.UseSqlServer(connectionString)
     );
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidateIssuer = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        ValidIssuer = builder.Configuration["JWT:Issuser"],
+        IssuerSigningKey = new SymmetricSecurityKey
+        (
+            Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
+        )
+    };
+});
 
 var app = builder.Build();
 
@@ -36,6 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors();
 
 app.UseHttpsRedirection();
 

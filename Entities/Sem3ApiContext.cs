@@ -39,7 +39,7 @@ public partial class Sem3ApiContext : DbContext
     {
         modelBuilder.Entity<Country>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__countrie__3213E83F894A0B96");
+            entity.HasKey(e => e.Id).HasName("PK__countrie__3213E83FE1E1E245");
 
             entity.ToTable("countries");
 
@@ -52,18 +52,29 @@ public partial class Sem3ApiContext : DbContext
 
         modelBuilder.Entity<Donate>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__donate__3213E83F3C29A015");
+            entity.HasKey(e => e.Id).HasName("PK__donates__3213E83FDD6F68D8");
 
-            entity.ToTable("donate");
+            entity.ToTable("donates");
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Amount)
                 .HasColumnType("decimal(14, 2)")
                 .HasColumnName("amount");
-            entity.Property(e => e.Name)
-                .HasMaxLength(225)
-                .IsUnicode(false)
-                .HasColumnName("name");
+            entity.Property(e => e.CreateAt)
+                .HasColumnType("datetime")
+                .HasColumnName("create_at");
+            entity.Property(e => e.ProjectId).HasColumnName("project_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Project).WithMany(p => p.Donates)
+                .HasForeignKey(d => d.ProjectId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__donates__project__3864608B");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Donates)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__donates__user_id__395884C4");
         });
 
         modelBuilder.Entity<DonateDetail>(entity =>
@@ -81,17 +92,17 @@ public partial class Sem3ApiContext : DbContext
             entity.HasOne(d => d.Donate).WithMany()
                 .HasForeignKey(d => d.DonateId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__donate_de__donat__70DDC3D8");
+                .HasConstraintName("FK__donate_de__donat__367C1819");
 
             entity.HasOne(d => d.Project).WithMany()
                 .HasForeignKey(d => d.ProjectId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__donate_de__proje__71D1E811");
+                .HasConstraintName("FK__donate_de__proje__37703C52");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83FC4F91D6B");
+            entity.HasKey(e => e.Id).HasName("PK__feedback__3213E83FA98279A1");
 
             entity.ToTable("feedback");
 
@@ -108,17 +119,17 @@ public partial class Sem3ApiContext : DbContext
             entity.HasOne(d => d.Project).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.ProjectId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__feedback__projec__6E01572D");
+                .HasConstraintName("FK__feedback__projec__339FAB6E");
 
             entity.HasOne(d => d.User).WithMany(p => p.Feedbacks)
                 .HasForeignKey(d => d.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__feedback__user_i__6D0D32F4");
+                .HasConstraintName("FK__feedback__user_i__32AB8735");
         });
 
         modelBuilder.Entity<News>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__news__3213E83F8C2F8D58");
+            entity.HasKey(e => e.Id).HasName("PK__news__3213E83F81FC7381");
 
             entity.ToTable("news");
 
@@ -127,10 +138,6 @@ public partial class Sem3ApiContext : DbContext
                 .HasMaxLength(225)
                 .IsUnicode(false)
                 .HasColumnName("city");
-            entity.Property(e => e.Country)
-                .HasMaxLength(225)
-                .IsUnicode(false)
-                .HasColumnName("country");
             entity.Property(e => e.CountryId).HasColumnName("country_id");
             entity.Property(e => e.CreatedAt)
                 .HasColumnType("datetime")
@@ -148,20 +155,20 @@ public partial class Sem3ApiContext : DbContext
                 .HasColumnName("thumbnail");
             entity.Property(e => e.TopicId).HasColumnName("topic_id");
 
-            entity.HasOne(d => d.CountryNavigation).WithMany(p => p.News)
+            entity.HasOne(d => d.Country).WithMany(p => p.News)
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__news__country_id__6EF57B66");
+                .HasConstraintName("FK__news__country_id__3493CFA7");
 
             entity.HasOne(d => d.Topic).WithMany(p => p.News)
                 .HasForeignKey(d => d.TopicId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__news__topic_id__6FE99F9F");
+                .HasConstraintName("FK__news__topic_id__3587F3E0");
         });
 
         modelBuilder.Entity<Project>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__projects__3213E83F6B2FE927");
+            entity.HasKey(e => e.Id).HasName("PK__projects__3213E83F8F2C1CFA");
 
             entity.ToTable("projects");
 
@@ -207,17 +214,17 @@ public partial class Sem3ApiContext : DbContext
             entity.HasOne(d => d.Country).WithMany(p => p.Projects)
                 .HasForeignKey(d => d.CountryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__projects__countr__6B24EA82");
+                .HasConstraintName("FK__projects__countr__30C33EC3");
 
             entity.HasOne(d => d.Topic).WithMany(p => p.Projects)
                 .HasForeignKey(d => d.TopicId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__projects__topic___6C190EBB");
+                .HasConstraintName("FK__projects__topic___31B762FC");
         });
 
         modelBuilder.Entity<Topic>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__topics__3213E83F0EEB965D");
+            entity.HasKey(e => e.Id).HasName("PK__topics__3213E83FE3AEF140");
 
             entity.ToTable("topics");
 
@@ -230,7 +237,7 @@ public partial class Sem3ApiContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__users__3213E83FCE86A34D");
+            entity.HasKey(e => e.Id).HasName("PK__users__3213E83F9A63EB9A");
 
             entity.ToTable("users");
 

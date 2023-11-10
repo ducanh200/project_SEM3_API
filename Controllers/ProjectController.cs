@@ -45,9 +45,9 @@ namespace SEM3_API.Controllers
                     country = new CountryDTO { id = p.Country.Id, name = p.Country.Name },
                     topic_id = (int)(p.TopicId),
                     topic = new TopicDTO { id = p.Topic.Id, name = p.Topic.Name },
-                    begin = (DateTime)(p.Begin),
-                    finish = (DateTime)(p.Finish),
-                    create_at = DateTime.Now,
+                    begin = Convert.ToDateTime(p.Begin),
+                    finish = Convert.ToDateTime(p.Finish),
+                    create_at = Convert.ToDateTime(p.CreatedAt)                
                 });
             }
 
@@ -79,9 +79,9 @@ namespace SEM3_API.Controllers
                     country = new CountryDTO { id = p.Country.Id, name = p.Country.Name },
                     topic_id = (int)(p.TopicId),
                     topic = new TopicDTO { id = p.Topic.Id, name = p.Topic.Name },
-                    begin = (DateTime)(p.Begin),
-                    finish = (DateTime)(p.Finish),
-                    create_at = DateTime.Now,
+                    begin = Convert.ToDateTime(p.Begin),
+                    finish = Convert.ToDateTime(p.Finish),
+                    create_at = Convert.ToDateTime(p.CreatedAt)
                 }) ;
 
             }
@@ -122,7 +122,7 @@ namespace SEM3_API.Controllers
             {
                 try
                 {
-                    Project project = new Project { Name = model.name, Thumbnail1 = model.thumbnail_1, Thumbnail2 = model.thumbnail_2, Fund = model.fund, Description = model.description, City = model.city, Address = model.address, CountryId = model.countryId, TopicId = model.topicId, Begin = model.begin, Finish = model.finish };
+                    Project project = new Project { Name = model.name, Thumbnail1 = model.thumbnail_1, Thumbnail2 = model.thumbnail_2, Fund = model.fund, Description = model.description, City = model.city, Address = model.address, CountryId = model.countryId, TopicId = model.topicId, Begin = model.begin, Finish = model.finish,CreatedAt = DateTime.UtcNow };
                     _context.Projects.Add(project);
                     _context.SaveChanges();
                     return Created($"get-by-id?id={project.Id}",
@@ -136,6 +136,46 @@ namespace SEM3_API.Controllers
             var msgs = ModelState.Values.SelectMany(v => v.Errors)
                 .Select(v => v.ErrorMessage);
             return BadRequest(string.Join(" | ", msgs));
+        }
+
+        [HttpPut]
+        public IActionResult Update(EditProject model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Project projects = new Project {Id = model.id, Name = model.name,Thumbnail1 = model.thumbnail_1,Thumbnail2 = model.thumbnail_2, Fund = model.fund,Description = model.description, City = model.city,Address = model.address,CountryId = model.countryId,TopicId = model.topicId,Begin = model.begin, Finish = model.finish};
+                    if(projects!= null)
+                    {
+                        _context.Projects.Update(projects);
+                        _context.SaveChanges();
+                        return Ok("Update successed!");
+                    }
+                }catch(Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int id)
+        {
+            try
+            {
+                Project project = _context.Projects.Find(id);
+                if (project == null)
+                    return NotFound();
+                    _context.Projects.Remove(project);
+                    _context.SaveChanges();
+                    return Ok("Deleted");
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

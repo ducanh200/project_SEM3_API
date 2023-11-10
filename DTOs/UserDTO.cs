@@ -7,9 +7,9 @@
         public string email { get; set; }
         public string password { get; set; }
         public string phone { get; set; }   
-        public string country { get; set; }
         public string city { get; set; }
         public string address { get; set; }
-        public string role { get; set; }    
+        public string role { get; set; }  
+        public string token { get; set; }
     }
 }
