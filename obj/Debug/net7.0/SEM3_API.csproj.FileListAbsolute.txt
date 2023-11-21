@@ -82,3 +82,4 @@ D:\Project_SEM3\SEM3_API\SEM3_API\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\Project_SEM3\SEM3_API\SEM3_API\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 D:\Project_SEM3\SEM3_API\SEM3_API\bin\Debug\net7.0\PayPalCheckoutSdk.dll
 D:\Project_SEM3\SEM3_API\SEM3_API\bin\Debug\net7.0\PayPalHttp-Dotnet.dll
+D:\Project_SEM3\SEM3_API\SEM3_API\bin\Debug\net7.0\SEM3_API.staticwebassets.runtime.json

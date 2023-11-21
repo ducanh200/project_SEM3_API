@@ -10,10 +10,10 @@ namespace SEM3_API.Models.Project
         public string name { get; set; }
 
         [Required(ErrorMessage = "vui lòng nhập file ảnh")]
-        public string thumbnail_1 { get; set; }
+        public IFormFile thumbnailFile1 { get; set; }
 
         [Required(ErrorMessage = "vui lòng nhập file ảnh")]
-        public string thumbnail_2 { get; set; }
+        public IFormFile thumbnailFile2 { get; set; }
 
         [Required(ErrorMessage = "vui lòng nhập tiền vốn")]
         public decimal fund { get; set; }

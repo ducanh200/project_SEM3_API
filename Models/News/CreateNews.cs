@@ -9,7 +9,7 @@ namespace SEM3_API.Models.News
         [Required(ErrorMessage = "vui lòng nhập thành phố")]
         public string city { get; set; }
         [Required(ErrorMessage = "vui lòng nhập file ảnh")]
-        public string thumbnail { get; set; }
+        public IFormFile thumbnailFile { get; set; }
 
         [Required(ErrorMessage = "vui lòng nhập nội dung bài báo")]
         public string description { get; set; }

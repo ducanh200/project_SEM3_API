@@ -13,10 +13,11 @@ namespace SEM3_API.Controllers
     public class ProjectController : ControllerBase
     {
         private Sem3ApiContext _context;
-
-        public ProjectController(Sem3ApiContext context)
+        private readonly IWebHostEnvironment _environment;
+        public ProjectController(Sem3ApiContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         [HttpGet]
@@ -100,13 +101,33 @@ namespace SEM3_API.Controllers
                 Project p = _context.Projects.Find(id);
                 if (p == null)
                     return NotFound();
-                List<Project> ls = _context.Projects
-                    .Where(p => p.TopicId == p.TopicId)
-                    .Where(p => p.Id != id)
-                    .Include(p => p.Topic)
-                    .Take(4)
-                    .OrderByDescending(p => p.Id)
-                    .ToList();
+
+                List<ProjectDTO> ls = _context.Projects
+            .Where(p => p.TopicId == p.TopicId && p.Id != id)
+            .Include(p => p.Topic)
+            .Take(4)
+            .OrderByDescending(p => p.Id)
+            .Select(p => new ProjectDTO
+            {
+                id = p.Id,
+                name = p.Name,
+                // Các thuộc tính khác tương tự
+                topic = new TopicDTO
+                {
+                    id = p.Topic.Id,
+                    name = p.Topic.Name
+                },
+                thumbnail_1 = p.Thumbnail1,
+                thumbnail_2 = p.Thumbnail2,
+                fund = (decimal)(p.Fund),
+                description = p.Description,
+                city = p.City,
+                address = p.Address,
+                begin = Convert.ToDateTime(p.Begin),
+                finish= Convert.ToDateTime(p.Finish),
+                create_at = Convert.ToDateTime (p.CreatedAt),
+            })
+            .ToList();
                 return Ok(ls);
             }
             catch (Exception ex)
@@ -116,15 +137,72 @@ namespace SEM3_API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateProject model)
+        public IActionResult Create([FromForm] CreateProject model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Project project = new Project { Name = model.name, Thumbnail1 = model.thumbnail_1, Thumbnail2 = model.thumbnail_2, Fund = model.fund, Description = model.description, City = model.city, Address = model.address, CountryId = model.countryId, TopicId = model.topicId, Begin = model.begin, Finish = model.finish,CreatedAt = DateTime.UtcNow };
+                    // Kiểm tra xem model có chứa ít nhất một ảnh thumbnail hay không
+                    if ((model.thumbnailFile1 == null || model.thumbnailFile1.Length == 0) &&
+                        (model.thumbnailFile2 == null || model.thumbnailFile2.Length == 0))
+                    {
+                        return BadRequest("Vui lòng chọn ít nhất một file ảnh");
+                    }
+
+                    // Tạo danh sách để lưu trữ các tên file ảnh
+                    List<string> fileNames = new List<string>();
+
+                    // Xử lý thumbnail 1
+                    if (model.thumbnailFile1 != null && model.thumbnailFile1.Length > 0)
+                    {
+                        var fileName1 = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnailFile1.FileName);
+                        var filePath1 = Path.Combine(_environment.WebRootPath, "uploads", fileName1);
+
+                        using (var fileStream1 = new FileStream(filePath1, FileMode.Create))
+                        {
+                            model.thumbnailFile1.CopyTo(fileStream1);
+                        }
+                        string url1 = $"{Request.Scheme}://{Request.Host}/uploads/{fileName1}";
+
+                        fileNames.Add(url1);
+                    }
+
+                    // Xử lý thumbnail 2
+                    if (model.thumbnailFile2 != null && model.thumbnailFile2.Length > 0)
+                    {
+                        var fileName2 = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnailFile2.FileName);
+                        var filePath2 = Path.Combine(_environment.WebRootPath, "uploads", fileName2);
+
+                        using (var fileStream2 = new FileStream(filePath2, FileMode.Create))
+                        {
+                            model.thumbnailFile2.CopyTo(fileStream2);
+                        }
+                        string url2 = $"{Request.Scheme}://{Request.Host}/uploads/{fileName2}";
+
+                        fileNames.Add(url2);
+                    }
+
+                    // Tạo dự án với danh sách tên file ảnh
+                    Project project = new Project
+                    {
+                        Name = model.name,
+                        Thumbnail1 = fileNames.Count > 0 ? fileNames[0] : null,
+                        Thumbnail2 = fileNames.Count > 1 ? fileNames[1] : null,
+                        Fund = model.fund,
+                        Description = model.description,
+                        City = model.city,
+                        Address = model.address,
+                        CountryId = model.countryId,
+                        TopicId = model.topicId,
+                        Begin = model.begin,
+                        Finish = model.finish,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
                     _context.Projects.Add(project);
                     _context.SaveChanges();
+
                     return Created($"get-by-id?id={project.Id}",
                         new ProjectDTO { id = project.Id, name = project.Name });
                 }
@@ -133,32 +211,76 @@ namespace SEM3_API.Controllers
                     return BadRequest(ex.Message);
                 }
             }
+
             var msgs = ModelState.Values.SelectMany(v => v.Errors)
                 .Select(v => v.ErrorMessage);
             return BadRequest(string.Join(" | ", msgs));
         }
 
         [HttpPut]
-        public IActionResult Update(EditProject model)
+        public IActionResult Update([FromForm] EditProject model)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    Project projects = new Project {Id = model.id, Name = model.name,Thumbnail1 = model.thumbnail_1,Thumbnail2 = model.thumbnail_2, Fund = model.fund,Description = model.description, City = model.city,Address = model.address,CountryId = model.countryId,TopicId = model.topicId,Begin = model.begin, Finish = model.finish};
-                    if(projects!= null)
+                    Project existingProject = _context.Projects.Find(model.id);
+
+                    if (existingProject == null)
                     {
-                        _context.Projects.Update(projects);
-                        _context.SaveChanges();
-                        return Ok("Update successed!");
+                        return NotFound("Không tìm thấy dự án cần sửa");
                     }
-                }catch(Exception e)
+
+                    // Kiểm tra xem model có chứa ảnh mới hay không
+                    if (model.thumbnailFile1 != null && model.thumbnailFile1.Length > 0)
+                    {
+                        var fileName1 = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnailFile1.FileName);
+                        var filePath1 = Path.Combine(_environment.WebRootPath, "uploads", fileName1);
+
+                        using (var fileStream1 = new FileStream(filePath1, FileMode.Create))
+                        {
+                            model.thumbnailFile1.CopyTo(fileStream1);
+                        }
+                        string url1 = $"{Request.Scheme}://{Request.Host}/uploads/{fileName1}";
+                        existingProject.Thumbnail1 = url1;
+                    }
+
+                    if (model.thumbnailFile2 != null && model.thumbnailFile2.Length > 0)
+                    {
+                        var fileName2 = Guid.NewGuid().ToString() + Path.GetExtension(model.thumbnailFile2.FileName);
+                        var filePath2 = Path.Combine(_environment.WebRootPath, "uploads", fileName2);
+
+                        using (var fileStream2 = new FileStream(filePath2, FileMode.Create))
+                        {
+                            model.thumbnailFile2.CopyTo(fileStream2);
+                        }
+                        string url2 = $"{Request.Scheme}://{Request.Host}/uploads/{fileName2}";
+                        existingProject.Thumbnail2 = url2;
+                    }
+
+                    // Cập nhật các thuộc tính khác từ model
+                    existingProject.Name = model.name;
+                    existingProject.Fund = model.fund;
+                    existingProject.Description = model.description;
+                    existingProject.City = model.city;
+                    existingProject.Address = model.address;
+                    existingProject.CountryId = model.countryId;
+                    existingProject.TopicId = model.topicId;
+                    existingProject.Begin = model.begin;
+                    existingProject.Finish = model.finish;
+
+                    // Lưu thay đổi vào cơ sở dữ liệu
+                    _context.SaveChanges();
+
+                    return Ok("Đã sửa dự án thành công!");
+                }
+                catch (Exception ex)
                 {
-                    return BadRequest(e.Message);
+                    return BadRequest(ex.Message);
                 }
             }
 
-            return BadRequest();
+            return BadRequest("Dữ liệu không hợp lệ");
         }
 
         [HttpDelete]

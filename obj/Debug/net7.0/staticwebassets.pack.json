@@ -1,0 +1,89 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\0a9c7e3f-71c7-41de-999c-05b97ad62e3a.jpg",
+      "PackagePath": "staticwebassets\\uploads\\0a9c7e3f-71c7-41de-999c-05b97ad62e3a.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\11a2b8aa-3653-4a33-9f43-1bf17a55cd68.webp",
+      "PackagePath": "staticwebassets\\uploads\\11a2b8aa-3653-4a33-9f43-1bf17a55cd68.webp"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\4de1d2a6-29ca-4ee3-9b5a-3d67b0128fa2.jpg",
+      "PackagePath": "staticwebassets\\uploads\\4de1d2a6-29ca-4ee3-9b5a-3d67b0128fa2.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\5dad4ecd-e57a-4026-a492-92ddeee9d2e6.jpg",
+      "PackagePath": "staticwebassets\\uploads\\5dad4ecd-e57a-4026-a492-92ddeee9d2e6.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\6a12223a-0116-47e8-8377-668aea1d1b75.jpg",
+      "PackagePath": "staticwebassets\\uploads\\6a12223a-0116-47e8-8377-668aea1d1b75.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\6ba6514a-14c6-4900-8fe0-83123876a324.jpg",
+      "PackagePath": "staticwebassets\\uploads\\6ba6514a-14c6-4900-8fe0-83123876a324.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\95ebd8df-00e5-467a-a4f9-08bf635f7860.jpg",
+      "PackagePath": "staticwebassets\\uploads\\95ebd8df-00e5-467a-a4f9-08bf635f7860.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\9e371f48-e8ba-4b01-b429-6cf7b9def77a.png",
+      "PackagePath": "staticwebassets\\uploads\\9e371f48-e8ba-4b01-b429-6cf7b9def77a.png"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\ac14cb06-425d-4c42-9c97-89a0cff83f5e.jpg",
+      "PackagePath": "staticwebassets\\uploads\\ac14cb06-425d-4c42-9c97-89a0cff83f5e.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\ac780eb9-457b-4387-bceb-e62fd9c989fe.jpg",
+      "PackagePath": "staticwebassets\\uploads\\ac780eb9-457b-4387-bceb-e62fd9c989fe.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\b1dffabe-cfd0-4b65-b53d-119021ca760b.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b1dffabe-cfd0-4b65-b53d-119021ca760b.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\b407757a-7064-4c20-a33d-fac057d83091.jpg",
+      "PackagePath": "staticwebassets\\uploads\\b407757a-7064-4c20-a33d-fac057d83091.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\bee79fd3-01d2-4feb-9d03-cddf72ad4d8e.jpg",
+      "PackagePath": "staticwebassets\\uploads\\bee79fd3-01d2-4feb-9d03-cddf72ad4d8e.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\d5f33c61-8184-4d94-8218-2161dfedcc7f.jpg",
+      "PackagePath": "staticwebassets\\uploads\\d5f33c61-8184-4d94-8218-2161dfedcc7f.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\e3d66418-d145-4b75-8a61-f3df7bedfe5c.jpg",
+      "PackagePath": "staticwebassets\\uploads\\e3d66418-d145-4b75-8a61-f3df7bedfe5c.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\f0d859c9-5998-4761-905c-f2623af668b6.jpg",
+      "PackagePath": "staticwebassets\\uploads\\f0d859c9-5998-4761-905c-f2623af668b6.jpg"
+    },
+    {
+      "Id": "D:\\Project_SEM3\\SEM3_API\\SEM3_API\\wwwroot\\uploads\\f1e23321-411c-48a5-9904-e754a5a98ddf.jpg",
+      "PackagePath": "staticwebassets\\uploads\\f1e23321-411c-48a5-9904-e754a5a98ddf.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.SEM3_API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.build.SEM3_API.props",
+      "PackagePath": "build\\SEM3_API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildMultiTargeting.SEM3_API.props",
+      "PackagePath": "buildMultiTargeting\\SEM3_API.props"
+    },
+    {
+      "Id": "obj\\Debug\\net7.0\\staticwebassets\\msbuild.buildTransitive.SEM3_API.props",
+      "PackagePath": "buildTransitive\\SEM3_API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

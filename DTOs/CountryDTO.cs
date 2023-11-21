@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace SEM3_API.DTOs
 
 {
-    [Route("/[Controller]")]
+    [Route("[Controller]")]
     [ApiController]
     public class CountryDTO : ControllerBase
     {
