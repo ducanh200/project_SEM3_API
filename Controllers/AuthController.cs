@@ -47,6 +47,18 @@ namespace SEM3_API.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Index()
+        {
+            List<User> users = _context.Users.ToList();
+            List<UserDTO> data = new List<UserDTO>();
+            foreach (User c in users)
+            {
+                data.Add(new UserDTO { id = c.Id, name = c.Name });
+            }
+            return Ok(users);
+        }
+
         [HttpPost]
         public IActionResult Register(UserRegister model)
         {
@@ -133,7 +145,7 @@ namespace SEM3_API.Controllers
                 var userClaims = identity.Claims;
                 var userId = userClaims.FirstOrDefault(c =>
                     c.Type == ClaimTypes.NameIdentifier)?.Value;
-                var user = _context.Users.Find(Convert.ToInt32(userId));
+                var user = _context.Users.FirstOrDefault(c => c.Id ==  Convert.ToInt32(userId));
                 return Ok(new UserDTO // đúng ra phải là UserProfileDTO
                 {
                     id = user.Id,
@@ -148,7 +160,6 @@ namespace SEM3_API.Controllers
             {
                 return Unauthorized(e.Message);
             }
-            return Ok();
         }
     }
 

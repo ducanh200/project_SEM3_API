@@ -32,27 +32,37 @@ namespace SEM3_API.Controllers
             List<DonateDTO> donateDTOs = allDonates.Select(d => new DonateDTO
             {
                 id = d.Id,
+                amount = d.Amount,
                 project_id = d.ProjectId,
                 user_id = d.UserId,
-                create_at = DateTime.Now,
+                created_at = Convert.ToDateTime(d.CreateAt)
             }).ToList();
 
             return Ok(donateDTOs);
         }
 
-        [HttpPost("contribute")]
-        public IActionResult Contribute(CreateDonate model)
+        [HttpPost("createdonate")]
+        public IActionResult CreateDonate([FromBody] CreateDonate createDonate)
         {
-            try
+            if (createDonate == null)
             {
-                
+                return BadRequest("Invalid request body");
             }
-            catch (Exception ex)
+
+            // Tạo một đối tượng Donate từ model CreateDonate
+            Donate newDonation = new Donate
             {
-                // Log lỗi và trả về thông báo lỗi
-                return BadRequest($"Lỗi xử lý thanh toán: {ex.Message}");
-            }
-            return Ok();
+                Amount = createDonate.amount,
+                UserId = createDonate.user_id,
+                ProjectId = createDonate.project_id,
+                CreateAt = DateTime.UtcNow
+            };
+
+            // Thêm đối tượng mới vào database
+            _context.Donates.Add(newDonation);
+            _context.SaveChanges();
+
+            return Ok(newDonation);
         }
     }
 }

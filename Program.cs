@@ -12,7 +12,6 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        //policy.WithOrigins("https://24h.com.vn");
         policy.AllowAnyOrigin();//allow all
         policy.AllowAnyMethod();
         policy.AllowAnyHeader();
@@ -39,7 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidAudience = builder.Configuration["JWT:Audience"],
-        ValidIssuer = builder.Configuration["JWT:Issuser"],
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey
         (
             Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
@@ -58,6 +57,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
